@@ -1,11 +1,11 @@
 # Descrição
 
-Utilize este repositório para comparação e compreensão dos conceitos detalhados na seção "Manual de implementação" do trabalho "ESTUDO E DESENVOLVIMENTO DE UM AMBIENTE DE SIMULAÇÃO PARA APLICAÇÕES DE REDES ELÉTRICAS INTELIGENTES UTILIZANDO O SOFTWARE PARA CO-SIMULAÇÃO MOSAIK 3.0".
+Utilize este repositório para **comparação e compreensão** dos conceitos detalhados na seção "Manual de implementação" do trabalho "ESTUDO E DESENVOLVIMENTO DE UM AMBIENTE DE SIMULAÇÃO PARA APLICAÇÕES DE REDES ELÉTRICAS INTELIGENTES UTILIZANDO O SOFTWARE PARA CO-SIMULAÇÃO MOSAIK 3.0".
 
-*Esse repositório baseaia-se no tutorial disposto na [documentação oficial do Mosaik 3.0](https://mosaik.readthedocs.io/en/latest/tutorials/index.html).*
+*Esse repositório baseia-se no tutorial proposto na [documentação oficial do Mosaik 3.0](https://mosaik.readthedocs.io/en/latest/tutorials/index.html).*
 
 ## Requisitos
-Este exemplo requer a instalação da versão 3.0 do Mosaik e uma versão Python >= 3.6.
+Este exemplo requer a instalação da versão 3.x do Mosaik e uma versão Python >= 3.6.
 
 Para executar este exemplo, é interessante criar um ambiente virtual (`virtualenv`) para adequada gestão dos pacotes instalados. 
 
