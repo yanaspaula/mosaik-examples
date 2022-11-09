@@ -20,7 +20,7 @@ Caso você não saiba o que é uma `virtualenv`, siga os tutoriais Mosaik sugeri
 1. Acesse/crie o seu `virtual-env` com Python >= 3.6 e Mosaik3;
 
 2. No seu terminal, clone este repositório git:
-    git clone https://github.com/yanaspaula/mosaik-example.git
+`git clone https://github.com/yanaspaula/mosaik-example.git`
 
 3. Acesse a pasta do repositório clonado e execute o exemplo no terminal com:
-    python3 demo.py
+`python3 demo.py`
