@@ -1,15 +1,13 @@
 # example_model.py
 """
-This module contains a simple example model.
+Possui o modelo do tutorial.
 
 """
 
-
 class Model:
-    """Simple model that increases its value *val* with some *delta* every
-    step.
+    """Modelo simples que adiciona o valor *val* a um valor *delta* a cada passo de execução.
 
-    You can optionally set the initial value *init_val*. It defaults to ``0``.
+    Opcionalmente, é possível setar um valor inicial *init_val*. Por padrão, ele é identificado como 0.
 
     """
     def __init__(self, init_val=0):
@@ -17,5 +15,5 @@ class Model:
         self.delta = 1
 
     def step(self):
-        """Perform a simulation step by adding *delta* to *val*."""
+        """Adiciona *delta* a *val* em um passo de execução."""
         self.val += self.delta
