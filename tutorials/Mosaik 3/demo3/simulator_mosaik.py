@@ -1,15 +1,14 @@
 # simulator_mosaik.py
 """
-Mosaik interface for the example simulator.
+Interface de comunicação (Sim API) do modelo do tutorial com o Mosaik.
 
 """
 import mosaik_api
-
 import example_model
 
 
 META = {
-    'type': 'time-based',
+    'type': 'time-based',   # O simulador executa com tempo contínuo!
     'models': {
         'ExampleModel': {
             'public': True,
@@ -24,11 +23,11 @@ class ExampleSim(mosaik_api.Simulator):
     def __init__(self):
         super().__init__(META)
         self.eid_prefix = 'Model_'
-        self.entities = {}  # Maps EIDs to model instances/entities
+        self.entities = {} 
         self.time = 0
 
     def init(self, sid, time_resolution, eid_prefix=None):
-        if float(time_resolution) != 1.:
+        if float(time_resolution) != 1.:    # Limita o time_resolution do Mosaik para 1.
             raise ValueError('ExampleSim only supports time_resolution=1., but'
                              ' %s was set.' % time_resolution)
         if eid_prefix is not None:
@@ -40,7 +39,7 @@ class ExampleSim(mosaik_api.Simulator):
         entities = []
 
         for i in range(next_eid, next_eid + num):
-            model_instance = example_model.Model(init_val)
+            model_instance = example_model.Model(init_val)     # O modelo é instanciado DIRETAMENTE no Sim API!
             eid = '%s%d' % (self.eid_prefix, i)
             self.entities[eid] = model_instance
             entities.append({'eid': eid, 'type': model})
@@ -49,8 +48,10 @@ class ExampleSim(mosaik_api.Simulator):
 
 
     def step(self, time, inputs, max_advance):
+        print('[simulator_mosaik] max_advance: {}'.format(max_advance))
         self.time = time
-        # Check for new delta and do step for each model instance:
+        
+        # Checa disponibilidade de novo delta e realiza step para cada instância de modelo
         for eid, model_instance in self.entities.items():
             if eid in inputs:
                 attrs = inputs[eid]
@@ -60,7 +61,7 @@ class ExampleSim(mosaik_api.Simulator):
 
             model_instance.step()
 
-        return time + 1  # Step size is 1 second
+        return time + 1  # Simuladores de tipo 'time-based' devem retornar um valor de next_step!
 
     def get_data(self, outputs):
         data = {}
@@ -72,7 +73,7 @@ class ExampleSim(mosaik_api.Simulator):
                 if attr not in self.meta['models']['ExampleModel']['attrs']:
                     raise ValueError('Unknown output attribute: %s' % attr)
 
-                # Get model.val or model.delta:
+                # Obtém model.val ou model.delta:
                 data[eid][attr] = getattr(model, attr)
 
         return data
