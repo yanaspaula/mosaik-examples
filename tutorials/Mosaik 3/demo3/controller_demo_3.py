@@ -1,10 +1,10 @@
 # controller.py
 """
-A simple demo controller.
+Um modelo de controle simples.
 
+Verifica se o valor *val_in* recebido de uma instância de modelo está entre [-3, 3].
 """
 import mosaik_api
-
 
 META = {
     'type': 'event-based',
@@ -16,7 +16,6 @@ META = {
         },
     },
 }
-
 
 class Controller(mosaik_api.Simulator):
     def __init__(self):
@@ -36,13 +35,41 @@ class Controller(mosaik_api.Simulator):
         return entities
 
     def step(self, time, inputs, max_advance):
+        print('[controller_demo_3] max_advance: {}'.format(max_advance))
         self.time = time
         data = {}
         for agent_eid, attrs in inputs.items():
+            '''
+                Verifica se há valores disponíveis de *delta* por evento.
+                Caso haja dados disponíveis pelo controlador-mestre, 
+                o controlador não calcula o *delta* e apenas recebe 
+                o valor disponível do mestre
+            '''
             delta_dict = attrs.get('delta', {})
-            if len(delta_dict) > 0:
-                data[agent_eid] = {'delta': list(delta_dict.values())[0]}
+            if len(delta_dict) > 0:     
+                data[agent_eid] = {'delta': list(delta_dict.values())[0]}   
                 continue
+
+            values_dict = attrs.get('val_in', {})
+            if len(values_dict) != 1:
+                raise RuntimeError('Only one ingoing connection allowed per '
+                                   'agent, but "%s" has %i.'
+                                   % (agent_eid, len(values_dict)))
+            value = list(values_dict.values())[0]
+
+            # Limita os valores de *val* dentro do intervalo [-3, 3]
+            if value >= 3:
+                delta = -1
+            elif value <= -3:
+                delta = 1
+            else:
+                continue
+
+            data[agent_eid] = {'delta': delta}
+
+        self.data = data
+
+        return None
 
     def get_data(self, outputs):
         data = {}
@@ -51,7 +78,7 @@ class Controller(mosaik_api.Simulator):
                 if attr != 'delta':
                     raise ValueError('Unknown output attribute "%s"' % attr)
                 if agent_eid in self.data:
-                    data['time'] = self.time
+                    data['time'] = self.time        # 'time' é identificado no dicionário de dados
                     data.setdefault(agent_eid, {})[attr] = self.data[agent_eid][attr]
 
         return data
