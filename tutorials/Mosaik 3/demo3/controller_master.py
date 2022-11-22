@@ -1,13 +1,14 @@
 # controller_master.py
 """
-Master controller using same-time loop.
+Controlador-mestre utilizando same-time loop.
 
+Calcula a soma dos valores de *delta* dos controladores e verifica se
+está no limite (-1, 1). Caso não esteja, seta todos os *delta* para 0.
 """
 import mosaik_api
 
-
 META = {
-    'type': 'event-based',
+    'type': 'event-based',      # Necessário para same-time loop
     'models': {
         'Agent': {
             'public': True,
@@ -17,14 +18,12 @@ META = {
     },
 }
 
-
-
 class Controller(mosaik_api.Simulator):
     def __init__(self):
         super().__init__(META)
         self.agents = []
         self.data = {}
-        self.cache = {} # Utiliza cache
+        self.cache = {} # Utiliza cache para armazenar valores de *delta* anteriores
         self.time = 0
 
     def create(self, num, model):
@@ -38,6 +37,7 @@ class Controller(mosaik_api.Simulator):
         return entities
 
     def step(self, time, inputs, max_advance):
+        print('[controller_master] max_advance: {}'.format(max_advance))
         self.time = time
         data = {}
         for agent_eid, attrs in inputs.items():
@@ -46,7 +46,7 @@ class Controller(mosaik_api.Simulator):
                 self.cache[key] = value
         
         if sum(self.cache.values()) < -1:
-            data[agent_eid] = {'delta_out': 0}
+            data[agent_eid] = {'delta_out': 0}   # Seta *delta* a ser recebido pelos controladores
 
         self.data = data
 
@@ -59,7 +59,7 @@ class Controller(mosaik_api.Simulator):
                 if attr != 'delta_out':
                     raise ValueError('Unknown output attribute "%s"' % attr)
                 if agent_eid in self.data:
-                    data['time'] = self.time
+                    data['time'] = self.time    # Necessário para same-time loop
                     data.setdefault(agent_eid, {})[attr] = self.data[agent_eid][attr]
 
         return data

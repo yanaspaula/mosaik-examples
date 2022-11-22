@@ -7,7 +7,7 @@ Verifica se o valor *val_in* recebido de uma instância de modelo está entre [-
 import mosaik_api
 
 META = {
-    'type': 'event-based',
+    'type': 'event-based',      # Necessário para same-time loop
     'models': {
         'Agent': {
             'public': True,
@@ -47,7 +47,7 @@ class Controller(mosaik_api.Simulator):
             '''
             delta_dict = attrs.get('delta', {})
             if len(delta_dict) > 0:     
-                data[agent_eid] = {'delta': list(delta_dict.values())[0]}   
+                data[agent_eid] = {'delta': list(delta_dict.values())[0]}   # Esvazia dicionário data para same-time loop
                 continue
 
             values_dict = attrs.get('val_in', {})
@@ -78,7 +78,7 @@ class Controller(mosaik_api.Simulator):
                 if attr != 'delta':
                     raise ValueError('Unknown output attribute "%s"' % attr)
                 if agent_eid in self.data:
-                    data['time'] = self.time        # 'time' é identificado no dicionário de dados
+                    data['time'] = self.time        # Necessário para same-time loop
                     data.setdefault(agent_eid, {})[attr] = self.data[agent_eid][attr]
 
         return data
