@@ -46,6 +46,7 @@ class Collector(mosaik_api.Simulator):
         return None
 
     def finalize(self):
+        print('----- Dados do controller.py -----')
         print('Collected data:')
         for sim, sim_data in sorted(self.data.items()):
             print('- %s:' % sim)

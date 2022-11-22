@@ -31,7 +31,6 @@ collector = world.start('Collector')
 # Criação das instâncias dos simuladores
 models = [examplesim.ExampleModel(init_val=i) for i in (-2, 0, -2)]
 agents = examplectrl.Agent.create(len(models))
-print('examplemasterctrl: {}'.format(examplemasterctrl))
 master_agent = examplemasterctrl.Agent.create(1)
 monitor = collector.Monitor()
 
@@ -48,5 +47,6 @@ mosaik.util.connect_many_to_one(world, models, monitor, 'val', 'delta')
 mosaik.util.connect_many_to_one(world, agents, monitor, 'delta')
 world.connect(master_agent[0], monitor, 'delta_out')
 
+print('----- Parâmetro max_advance -----')
 # Execução da simulação
 world.run(until=END)
